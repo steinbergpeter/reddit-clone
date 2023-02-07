@@ -85,6 +85,7 @@ const Login: FC = () => {
           fontWeight={700}
           cursor="pointer"
           onClick={switchToSignup}
+          mb={2}
         >
           SIGN UP
         </Text>
