@@ -1,6 +1,6 @@
 import { FC, useState, ChangeEvent, FormEvent } from 'react'
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
-import { authModalState } from '@/atoms/authModalAtom'
+import { authModalState, ModalView } from '@/atoms/authModalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
@@ -34,7 +34,6 @@ const Signup: FC = () => {
       return
     }
     createUserWithEmailAndPassword(email, password)
-    // setAuthModalState(p => ({ ...p, isOpen: false }))
     setSignupForm(signupFormDefault)
   }
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +135,7 @@ const Signup: FC = () => {
         isLoading={loading}
         isActive={isSubmitActive}
       >
-        Submit
+        Sign Up
       </Button>
       <Flex fontSize="9pt" justify="center">
         <Text mr={1}>Already a redditor?</Text>

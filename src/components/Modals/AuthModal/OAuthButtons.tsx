@@ -11,7 +11,7 @@ const OAuthButtons: FC = () => {
   }
 
   return (
-    <Flex direction="column" width="100%" mb={4}>
+    <Flex direction="column" width="100%" mb={2}>
       <Button
         mb={2}
         variant="oauth"
@@ -26,6 +26,15 @@ const OAuthButtons: FC = () => {
         Continue with GitHub
       </Button>
       {error && <Text>{error.message}</Text>}
+      <Text
+        color="gray.500"
+        fontWeight={700}
+        fontSize={12}
+        textAlign="center"
+        mt={2}
+      >
+        ---------- Or ----------
+      </Text>
     </Flex>
   )
 }

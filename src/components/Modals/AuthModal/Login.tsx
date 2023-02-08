@@ -1,6 +1,6 @@
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
 import { FC, useState, ChangeEvent, FormEvent } from 'react'
-import { authModalState } from '@/atoms/authModalAtom'
+import { authModalState, ModalView } from '@/atoms/authModalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
@@ -38,6 +38,10 @@ const Login: FC = () => {
 
   const switchToSignup = () => {
     setAuthModalState(p => ({ ...p, view: 'signup' }))
+  }
+
+  const switchToReset = () => {
+    setAuthModalState(p => ({ ...p, view: 'resetPassword' }))
   }
 
   return (
@@ -102,11 +106,26 @@ const Login: FC = () => {
         type="submit"
         isActive={isLoginActive}
       >
-        Submit
+        Log In
       </Button>
+
+      <Flex justify="center" mb={2} fontSize="9pt">
+        <Text mr={1}>Forgot your password?</Text>
+        <Text
+          fontSize="9pt"
+          fontWeight={700}
+          color="blue.500"
+          cursor="pointer"
+          onClick={switchToReset}
+        >
+          RESET
+        </Text>
+      </Flex>
+
       <Flex fontSize="9pt" justify="center">
         <Text mr={1}>New Here?</Text>
         <Text
+          fontSize="9pt"
           color="blue.500"
           fontWeight={700}
           cursor="pointer"
