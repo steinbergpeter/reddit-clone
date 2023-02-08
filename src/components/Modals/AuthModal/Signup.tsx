@@ -1,32 +1,30 @@
-import { Input, Button, Flex, Text } from '@chakra-ui/react'
 import { FC, useState, ChangeEvent, FormEvent } from 'react'
-import { authModalState, AuthModalState } from '@/atoms/authModalAtom'
+import { Input, Button, Flex, Text } from '@chakra-ui/react'
+import { authModalState } from '@/atoms/authModalAtom'
 import { useSetRecoilState } from 'recoil'
-import { auth } from '@/firebase/clientApp'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import { auth } from '@/firebase/clientApp'
+import { FIREBASE_ERRORS } from '@/firebase/firebaseErrors'
 
 const Signup: FC = () => {
   const setAuthModalState = useSetRecoilState(authModalState)
-
   const signupFormDefault = {
     email: '',
     password: '',
     confirmPassword: '',
   }
-
   const [signupForm, setSignupForm] = useState(signupFormDefault)
-
-  const [error, setError] = useState('')
-
   const { email, password, confirmPassword } = signupForm
 
+  const [error, setError] = useState('')
+  const isSubmitActive =
+    email === '' || password === '' || confirmPassword === ''
   const [
     createUserWithEmailAndPassword,
     user,
     loading,
     userError,
   ] = useCreateUserWithEmailAndPassword(auth)
-
   //Firebase logic
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -36,14 +34,12 @@ const Signup: FC = () => {
       return
     }
     createUserWithEmailAndPassword(email, password)
+    // setAuthModalState(p => ({ ...p, isOpen: false }))
     setSignupForm(signupFormDefault)
-    setAuthModalState(prev => ({ ...prev, isOpen: false }))
   }
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSignupForm(p => ({ ...p, [e.target.name]: e.target.value }))
   }
-
   const switchToLogin = () => {
     setAuthModalState(p => ({ ...p, view: 'login' }))
   }
@@ -125,17 +121,20 @@ const Signup: FC = () => {
           borderColor: 'blue.500',
         }}
       />
-      {error && (
-        <Text textAlign="center" color="red">
-          {error}
-        </Text>
-      )}
+
+      <Text textAlign="center" color="red" fontSize="10pt">
+        {error && error}
+        {userError &&
+          FIREBASE_ERRORS[userError.code as keyof typeof FIREBASE_ERRORS]}
+      </Text>
+
       <Button
         width="100%"
         height="36px"
         my={2}
         type="submit"
         isLoading={loading}
+        isActive={isSubmitActive}
       >
         Submit
       </Button>
