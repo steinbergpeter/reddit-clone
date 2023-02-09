@@ -1,31 +1,28 @@
-import { FC, useEffect } from 'react'
+import { authModalState } from '@/atoms/authModalAtom'
+import { auth } from '@/firebase/clientApp'
 import {
+  Flex,
   Modal,
-  ModalOverlay,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Flex,
-  Text,
+  ModalOverlay,
 } from '@chakra-ui/react'
-import { useRecoilState } from 'recoil'
-import { authModalState, ModalView } from '@/atoms/authModalAtom'
-import AuthInputs from './AuthInputs'
-import OAuthButtons from './OAuthButtons'
-import ResetPassword from '../AuthModal/ResetPassword'
+import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '@/firebase/clientApp'
+import { useRecoilState } from 'recoil'
+import AuthInputs from './authSections/AuthInputs'
+import OAuthButtons from './authSections/OAuthButtons'
 
-const AuthModal: FC = () => {
+const AuthModal = () => {
   const [modalState, setModalState] = useRecoilState(authModalState)
-  const [user, loading, error] = useAuthState(auth)
+  const [user, _loading, _error] = useAuthState(auth)
   const { isOpen, view } = modalState
   const handleClose = () => setModalState(p => ({ ...p, isOpen: false }))
 
   useEffect(() => {
     if (user) handleClose()
-    console.log('user: ', user?.email)
   }, [user])
 
   return (

@@ -1,22 +1,23 @@
 import { Button, Flex } from '@chakra-ui/react'
-import { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { authModalState } from '@/atoms/authModalAtom'
 
-const AuthButtons: FC = () => {
+const AuthButtons = () => {
   const setAuthModalState = useSetRecoilState(authModalState)
   const handleLogIn = () => setAuthModalState({ isOpen: true, view: 'login' })
   const handleSignUp = () => setAuthModalState({ isOpen: true, view: 'signup' })
 
   return (
-    <Flex>
+    <Flex
+      mr={2}
+      display={{
+        base: 'none',
+        sm: 'flex',
+      }}
+    >
       <Button
         variant="outline"
         height="28px"
-        display={{
-          base: 'none',
-          sm: 'flex',
-        }}
         width={{
           base: '70px',
           md: '110px',
@@ -28,10 +29,6 @@ const AuthButtons: FC = () => {
       </Button>
       <Button
         height="28px"
-        display={{
-          base: 'none',
-          sm: 'flex',
-        }}
         width={{
           base: '70px',
           md: '110px',

@@ -1,12 +1,12 @@
-import { FC, useState, ChangeEvent, FormEvent } from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
-import { authModalState, ModalView } from '@/atoms/authModalAtom'
+import { authModalState } from '@/atoms/authModalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
 import { FIREBASE_ERRORS } from '@/firebase/firebaseErrors'
 
-const Signup: FC = () => {
+const Signup = () => {
   const setAuthModalState = useSetRecoilState(authModalState)
   const signupFormDefault = {
     email: '',

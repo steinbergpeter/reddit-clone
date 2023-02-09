@@ -1,12 +1,11 @@
 import { Flex } from '@chakra-ui/react'
-import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { authModalState, ModalView } from '@/atoms/authModalAtom'
-import Login from './Login'
-import Signup from './Signup'
-import ResetPassword from './ResetPassword'
+import { authModalState } from '@/atoms/authModalAtom'
+import Login from './authInputs/Login'
+import Signup from './authInputs/Signup'
+import ResetPassword from './authInputs/ResetPassword'
 
-const AuthInputs: FC = () => {
+const AuthInputs = () => {
   const { view } = useRecoilValue(authModalState)
   return (
     <Flex direction="column" align="center" width="100%" mt={4}>

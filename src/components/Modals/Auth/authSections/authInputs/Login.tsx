@@ -1,12 +1,12 @@
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
-import { FC, useState, ChangeEvent, FormEvent } from 'react'
-import { authModalState, ModalView } from '@/atoms/authModalAtom'
+import { useState, ChangeEvent, FormEvent } from 'react'
+import { authModalState } from '@/atoms/authModalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
 import { FIREBASE_ERRORS } from '@/firebase/firebaseErrors'
 
-const Login: FC = () => {
+const Login = () => {
   const setAuthModalState = useSetRecoilState(authModalState)
 
   const loginFormDefault = {
