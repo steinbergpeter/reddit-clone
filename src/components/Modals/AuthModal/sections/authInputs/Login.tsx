@@ -1,13 +1,13 @@
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
 import { useState, ChangeEvent, FormEvent } from 'react'
-import { authModalState } from '@/atoms/authModalAtom'
+import { modalState } from '@/atoms/modalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
 import { FIREBASE_ERRORS } from '@/firebase/firebaseErrors'
 
 const Login = () => {
-  const setAuthModalState = useSetRecoilState(authModalState)
+  const setModalState = useSetRecoilState(modalState)
 
   const loginFormDefault = {
     email: '',
@@ -37,11 +37,11 @@ const Login = () => {
   }
 
   const switchToSignup = () => {
-    setAuthModalState(p => ({ ...p, view: 'signup' }))
+    setModalState(p => ({ ...p, view: 'signup' }))
   }
 
   const switchToReset = () => {
-    setAuthModalState(p => ({ ...p, view: 'resetPassword' }))
+    setModalState(p => ({ ...p, view: 'resetPassword' }))
   }
 
   return (

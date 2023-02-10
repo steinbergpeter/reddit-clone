@@ -1,4 +1,4 @@
-import { authModalState } from '@/atoms/authModalAtom'
+import { modalState } from '@/atoms/modalAtom'
 import { auth } from '@/firebase/clientApp'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import {
@@ -22,10 +22,14 @@ import { useSetRecoilState } from 'recoil'
 type Props = { user?: User | null }
 
 const UserMenu = ({ user }: Props) => {
-  const setAuthModalState = useSetRecoilState(authModalState)
+  const setAuthModalState = useSetRecoilState(modalState)
 
   const goToLogin = () => {
-    setAuthModalState(p => ({ ...p, isOpen: true, view: 'login' }))
+    setAuthModalState(p => ({
+      ...p,
+      isAuthModalOpen: true,
+      authModalView: 'login',
+    }))
   }
 
   const handleSignOut = () => {

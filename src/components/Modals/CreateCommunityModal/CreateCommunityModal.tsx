@@ -15,17 +15,17 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 
 type Props = {
   isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
+  handleClose: () => void
 }
 
-const CreateCommunityModal = ({ isOpen, setIsOpen }: Props) => {
+const CreateCommunityModal = ({ isOpen, handleClose }: Props) => {
   const [communityName, setCommunityName] = useState('')
   const [charsRemaining, setCharsRemaining] = useState(21)
 
-  const handleClose = () => {
+  const handleCloseAndClear = () => {
     setCommunityName('')
     setCharsRemaining(21)
-    setIsOpen(false)
+    handleClose()
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const CreateCommunityModal = ({ isOpen, setIsOpen }: Props) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={handleClose}>
+      <Modal isOpen={isOpen} onClose={handleCloseAndClear}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader

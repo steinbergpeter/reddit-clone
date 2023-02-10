@@ -2,6 +2,7 @@ import { Flex, Menu, MenuButton, MenuList, Icon, Text } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { TiHome } from 'react-icons/ti'
 import Communities from './sections/Communities'
+
 const Directory = () => {
   return (
     <Menu>
