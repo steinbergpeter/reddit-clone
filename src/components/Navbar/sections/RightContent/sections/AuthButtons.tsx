@@ -1,11 +1,21 @@
 import { Button, Flex } from '@chakra-ui/react'
 import { useSetRecoilState } from 'recoil'
-import { authModalState } from '@/atoms/authModalAtom'
+import { modalState } from '@/atoms/modalAtom'
 
 const AuthButtons = () => {
-  const setAuthModalState = useSetRecoilState(authModalState)
-  const handleLogIn = () => setAuthModalState({ isOpen: true, view: 'login' })
-  const handleSignUp = () => setAuthModalState({ isOpen: true, view: 'signup' })
+  const setAuthModalState = useSetRecoilState(modalState)
+  const handleLogIn = () =>
+    setAuthModalState(p => ({
+      ...p,
+      isAuthModalOpen: true,
+      authModalView: 'login',
+    }))
+  const handleSignUp = () =>
+    setAuthModalState(p => ({
+      ...p,
+      isAuthModalOpen: true,
+      authModalView: 'signup',
+    }))
 
   return (
     <Flex

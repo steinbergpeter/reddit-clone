@@ -1,13 +1,13 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
-import { authModalState } from '@/atoms/authModalAtom'
+import { modalState } from '@/atoms/modalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
 import { FIREBASE_ERRORS } from '@/firebase/firebaseErrors'
 
 const Signup = () => {
-  const setAuthModalState = useSetRecoilState(authModalState)
+  const setAuthModalState = useSetRecoilState(modalState)
   const signupFormDefault = {
     email: '',
     password: '',
@@ -40,7 +40,7 @@ const Signup = () => {
     setSignupForm(p => ({ ...p, [e.target.name]: e.target.value }))
   }
   const switchToLogin = () => {
-    setAuthModalState(p => ({ ...p, view: 'login' }))
+    setAuthModalState(p => ({ ...p, authModalView: 'login' }))
   }
 
   return (

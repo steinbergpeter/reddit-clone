@@ -1,4 +1,4 @@
-import { authModalState } from '@/atoms/authModalAtom'
+import { modalState } from '@/atoms/modalAtom'
 import { auth } from '@/firebase/clientApp'
 import {
   Flex,
@@ -12,14 +12,15 @@ import {
 import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRecoilState } from 'recoil'
-import AuthInputs from './authSections/AuthInputs'
-import OAuthButtons from './authSections/OAuthButtons'
+import AuthInputs from './sections/AuthInputs'
+import OAuthButtons from './sections/OAuthButtons'
 
 const AuthModal = () => {
-  const [modalState, setModalState] = useRecoilState(authModalState)
+  const [authModalState, setAuthModalState] = useRecoilState(modalState)
   const [user, _loading, _error] = useAuthState(auth)
-  const { isOpen, view } = modalState
-  const handleClose = () => setModalState(p => ({ ...p, isOpen: false }))
+  const { isAuthModalOpen: isOpen, authModalView: view } = authModalState
+  const handleClose = () =>
+    setAuthModalState(p => ({ ...p, isAuthModalOpen: false }))
 
   useEffect(() => {
     if (user) handleClose()
