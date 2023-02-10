@@ -1,21 +1,24 @@
+import { auth, firestore } from '@/firebase/clientApp'
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
   Box,
-  Text,
-  Input,
+  Button,
   Checkbox,
-  Stack,
   Flex,
   Icon,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  Text,
 } from '@chakra-ui/react'
+import { doc, getDoc, serverTimestamp, setDoc } from '@firebase/firestore'
 import { ChangeEvent, useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs'
 import { HiLockClosed } from 'react-icons/hi'
 
@@ -25,15 +28,17 @@ type Props = {
 }
 
 const CreateCommunityModal = ({ isOpen, handleClose }: Props) => {
+  const [user] = useAuthState(auth)
   const [communityName, setCommunityName] = useState('')
   const [charsRemaining, setCharsRemaining] = useState(21)
   const [communityType, setCommunityType] = useState('public')
-
+  const [error, setError] = useState('')
   const handleCloseAndClear = () => {
     setCommunityName('')
     setCharsRemaining(21)
     handleClose()
   }
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -44,6 +49,38 @@ const CreateCommunityModal = ({ isOpen, handleClose }: Props) => {
 
   const handleTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCommunityType(e.target.name)
+  }
+
+  const handleCreateCommunity = async () => {
+    setIsLoading(true)
+    const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/
+    try {
+      if (format.test(communityName) || communityName.length < 3) {
+        throw new Error(
+          'Community Names must be between 3-21 Characters and can only contain letters, numbers, and underscores.'
+        )
+      }
+      const communityDocRef = doc(firestore, 'communities', communityName)
+      const communityDoc = await getDoc(communityDocRef)
+      if (communityDoc.exists()) {
+        throw new Error(
+          `Sorry, r/${communityName} is already taken. Try another.`
+        )
+      }
+      await setDoc(communityDocRef, {
+        creatorId: user?.uid,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        privacyType: communityType,
+      })
+    } catch (err) {
+      console.log('Error in handleCreateCommunity: ', err)
+      if (err instanceof Error) {
+        setError(err.message)
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -89,6 +126,9 @@ const CreateCommunityModal = ({ isOpen, handleClose }: Props) => {
                 color={charsRemaining > 0 ? 'gray.500' : 'red'}
               >
                 {charsRemaining} Characters remaining
+              </Text>
+              <Text fontSize="9pt" color="red" pt={1}>
+                {error}
               </Text>
               <Box my={4}>
                 <Text fontWeight={600} fontSize={15} mb={2}>
@@ -157,7 +197,7 @@ const CreateCommunityModal = ({ isOpen, handleClose }: Props) => {
             >
               Cancel
             </Button>
-            <Button height="30px" onClick={() => {}}>
+            <Button height="30px" onClick={handleCreateCommunity}>
               Create Community
             </Button>
           </ModalFooter>
