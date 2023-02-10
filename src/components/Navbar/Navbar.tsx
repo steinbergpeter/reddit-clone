@@ -11,21 +11,20 @@ const Navbar = () => {
   const [user, loading, error] = useAuthState(auth)
 
   return (
-    <Flex bg="white" align="center" justify="center">
-      <Flex
-        bg="white"
-        height="60px"
-        padding="6px 12px"
-        alignItems="center"
-        gap={4}
-        maxWidth="1100px"
-        flexGrow={1}
-      >
-        <LeftContent />
-        <Directory />
-        <SearchInput />
-        <RightContent user={user} />
-      </Flex>
+    <Flex
+      bg="white"
+      height="44px"
+      padding="6px 12px"
+      justify={{ md: 'space-between' }}
+      align="center"
+      gap={4}
+      maxWidth="1000px"
+      flexGrow={1}
+    >
+      <LeftContent />
+      {user && <Directory />}
+      <SearchInput user={user} />
+      <RightContent user={user} />
     </Flex>
   )
 }
