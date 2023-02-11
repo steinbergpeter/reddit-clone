@@ -37,11 +37,11 @@ const Login = () => {
   }
 
   const switchToSignup = () => {
-    setModalState(p => ({ ...p, view: 'signup' }))
+    setModalState(p => ({ ...p, setModalState: 'signup' }))
   }
 
   const switchToReset = () => {
-    setModalState(p => ({ ...p, view: 'resetPassword' }))
+    setModalState(p => ({ ...p, setModalState: 'resetPassword' }))
   }
 
   return (

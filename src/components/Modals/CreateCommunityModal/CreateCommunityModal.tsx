@@ -16,11 +16,18 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { doc, getDoc, serverTimestamp, setDoc } from '@firebase/firestore'
+import {
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp,
+  setDoc,
+} from '@firebase/firestore'
 import { ChangeEvent, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs'
 import { HiLockClosed } from 'react-icons/hi'
+import { v4 as uuid } from 'uuid'
 
 type Props = {
   isOpen: boolean
@@ -50,29 +57,48 @@ const CreateCommunityModal = ({ isOpen, handleClose }: Props) => {
   const handleTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCommunityType(e.target.name)
   }
-
+  //create community as transaction along with creating user snippet
   const handleCreateCommunity = async () => {
+    setError('')
     setIsLoading(true)
     const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/
     try {
+      //Make sure proposed name is valid
       if (format.test(communityName) || communityName.length < 3) {
         throw new Error(
           'Community Names must be between 3-21 Characters and can only contain letters, numbers, and underscores.'
         )
       }
+      //look up reference for list of communities
       const communityDocRef = doc(firestore, 'communities', communityName)
-      const communityDoc = await getDoc(communityDocRef)
-      if (communityDoc.exists()) {
-        throw new Error(
-          `Sorry, r/${communityName} is already taken. Try another.`
+      await runTransaction(firestore, async transaction => {
+        //verify community doesn't already exist
+        const communityDoc = await transaction.get(communityDocRef)
+        if (communityDoc.exists()) {
+          throw new Error(
+            `Sorry, r/${communityName} is already taken. Try another name.`
+          )
+        }
+        //include addition of community to the transaction
+        transaction.set(communityDocRef, {
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          privacyType: communityType,
+        })
+        //include addition of user to snippet in the transaction
+        const path = doc(
+          firestore,
+          `users/${user?.uid}/communitySnippets`,
+          communityName
         )
-      }
-      await setDoc(communityDocRef, {
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityType,
+        const snippet = {
+          communityId: communityName,
+          isModerator: true,
+        }
+        transaction.set(path, snippet)
       })
+      handleClose()
     } catch (err) {
       console.log('Error in handleCreateCommunity: ', err)
       if (err instanceof Error) {
@@ -197,7 +223,11 @@ const CreateCommunityModal = ({ isOpen, handleClose }: Props) => {
             >
               Cancel
             </Button>
-            <Button height="30px" onClick={handleCreateCommunity}>
+            <Button
+              height="30px"
+              onClick={handleCreateCommunity}
+              isLoading={isLoading}
+            >
               Create Community
             </Button>
           </ModalFooter>
