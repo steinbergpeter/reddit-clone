@@ -1,14 +1,15 @@
+import { communitiesState, Community } from '@/atoms/communitiesAtom'
+import { firestore } from '@/firebase/clientApp'
 import { doc, getDoc } from 'firebase/firestore'
 import { GetServerSidePropsContext } from 'next'
-import React, { useEffect } from 'react'
-import { firestore } from '@/firebase/clientApp'
-import { communitiesState, Community } from '@/atoms/communitiesAtom'
-import safeJsonStringify from 'safe-json-stringify'
+import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
+import safeJsonStringify from 'safe-json-stringify'
 
 type Props = {
   communityData: Community
 }
+
 const CommunityPage = ({ communityData }: Props) => {
   const [communityStateValue, setCommunityStateValue] = useRecoilState(
     communitiesState
@@ -21,7 +22,12 @@ const CommunityPage = ({ communityData }: Props) => {
     }))
   }, [communityData])
 
-  return <div>Welcome to {JSON.stringify(communityStateValue)}</div>
+  return (
+    <div>
+      <h4>communityData: {JSON.stringify(communityData)}</h4>
+      <h5>communityStateValue: {JSON.stringify(communityStateValue)}</h5>
+    </div>
+  )
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -32,6 +38,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       'communities',
       context.query.communityId as string
     )
+    console.log('communityDocRef: ', communityDocRef)
     const communityDoc = await getDoc(communityDocRef)
 
     return {
@@ -43,7 +50,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   } catch (err) {
     if (err instanceof Error) {
-      console.error(err)
+      console.log(err)
     } else {
       console.log('unidentified error: ', err)
     }
