@@ -7,7 +7,7 @@ import { auth } from '@/firebase/clientApp'
 import { FIREBASE_ERRORS } from '@/firebase/firebaseErrors'
 
 const Signup = () => {
-  const setAuthModalState = useSetRecoilState(modalState)
+  const setModalState = useSetRecoilState(modalState)
   const signupFormDefault = {
     email: '',
     password: '',
@@ -40,7 +40,7 @@ const Signup = () => {
     setSignupForm(p => ({ ...p, [e.target.name]: e.target.value }))
   }
   const switchToLogin = () => {
-    setAuthModalState(p => ({ ...p, authModalView: 'login' }))
+    setModalState(p => ({ ...p, authModalView: 'login' }))
   }
 
   return (

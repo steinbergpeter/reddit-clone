@@ -26,7 +26,7 @@ export default function Home() {
         isCreateCommunityModalOpen: {isCreateCommunityModalOpen.toString()}
       </h2>
       <br />
-      <h2>firebase-user: {user?.displayName || 'no user'}</h2>
+      <h2>firebase-user: {user?.email || 'no user'}</h2>
     </div>
   )
 }

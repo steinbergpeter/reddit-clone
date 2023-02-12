@@ -7,7 +7,7 @@ import { auth } from '@/firebase/clientApp'
 import { useSetRecoilState } from 'recoil'
 
 const ResetPassword = () => {
-  const setAuthModalState = useSetRecoilState(modalState)
+  const setModalState = useSetRecoilState(modalState)
 
   const [email, setEmail] = useState('')
   const [success, setSuccess] = useState(false)
@@ -20,6 +20,11 @@ const ResetPassword = () => {
     await sendPasswordResetEmail(email)
     setSuccess(true)
   }
+
+  const handleGotoLogin = () =>
+    setModalState(p => ({ ...p, authModalView: 'login' }))
+  const handleGotoSignup = () =>
+    setModalState(p => ({ ...p, authModalView: 'signup' }))
 
   return (
     <Flex direction="column" alignItems="center" width="100%">
@@ -81,27 +86,9 @@ const ResetPassword = () => {
         fontWeight={700}
         cursor="pointer"
       >
-        <Text
-          onClick={() =>
-            setAuthModalState(prev => ({
-              ...prev,
-              view: 'login',
-            }))
-          }
-        >
-          LOGIN
-        </Text>
+        <Text onClick={handleGotoLogin}>LOGIN</Text>
         <Icon as={BsDot} />
-        <Text
-          onClick={() =>
-            setAuthModalState(prev => ({
-              ...prev,
-              view: 'signup',
-            }))
-          }
-        >
-          SIGN UP
-        </Text>
+        <Text onClick={handleGotoSignup}>SIGN UP</Text>
       </Flex>
     </Flex>
   )

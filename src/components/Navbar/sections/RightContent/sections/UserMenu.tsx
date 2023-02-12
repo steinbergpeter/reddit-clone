@@ -60,14 +60,16 @@ const UserMenu = ({ user }: Props) => {
                   display={{ base: 'none', lg: 'flex' }}
                   fontSize="8pt"
                   align="flex-start"
-                  mr={8}
+                  mr={6}
                 >
                   <Text fontWeight={700}>
                     {user?.displayName || user.email?.split('@')[0]}
                   </Text>
                   <Flex align="center">
-                    <Icon as={IoSparkles} color="brand.100" mr={1} />
-                    <Text color="gray.400">1 karma</Text>
+                    <Icon as={IoSparkles} color="brand.100" />
+                    <Text color="gray.400" width={16}>
+                      1 karma
+                    </Text>
                   </Flex>
                 </Flex>
               </>
