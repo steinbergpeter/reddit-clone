@@ -1,4 +1,4 @@
-import { modalState } from '@/atoms/modalAtom'
+import { modalState } from '@/state/recoil/atoms/modalAtom'
 import { auth } from '@/firebase/clientApp'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import {
@@ -17,23 +17,27 @@ import { FaRedditSquare } from 'react-icons/fa'
 import { IoSparkles } from 'react-icons/io5'
 import { MdOutlineLogin } from 'react-icons/md'
 import { VscAccount } from 'react-icons/vsc'
-import { useSetRecoilState } from 'recoil'
+import { useResetRecoilState, useSetRecoilState } from 'recoil'
+import { communityState } from '@/state/recoil/atoms/communitiesAtom'
 
 type Props = { user?: User | null }
 
 const UserMenu = ({ user }: Props) => {
+  const resetCommunityState = useResetRecoilState(communityState)
   const setAuthModalState = useSetRecoilState(modalState)
 
   const goToLogin = () => {
-    setAuthModalState(p => ({
+    setAuthModalState((p) => ({
       ...p,
       isAuthModalOpen: true,
       authModalView: 'login',
     }))
   }
 
-  const handleSignOut = () => {
-    signOut(auth)
+  const handleSignOut = async () => {
+    await signOut(auth)
+    // clear community state
+    resetCommunityState()
   }
 
   return (
@@ -95,10 +99,10 @@ const UserMenu = ({ user }: Props) => {
             </MenuItem>
             <MenuDivider />
             <MenuItem
-              onClick={handleSignOut}
               fontSize="10px"
               fontWeight={700}
               _hover={{ bg: 'blue.500', color: 'white' }}
+              onClick={handleSignOut}
             >
               <Flex align="center">
                 <Icon as={MdOutlineLogin} mr={2} fontSize={20} />

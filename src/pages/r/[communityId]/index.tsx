@@ -1,46 +1,56 @@
-import { communitiesState, Community } from '@/atoms/communitiesAtom'
 import CommunityNotFound from '@/components/Community/CommunityNotFound'
+import PageContent from '@/components/layouts/PageContent'
 import { auth, firestore } from '@/firebase/clientApp'
+import { Community, communityState } from '@/state/recoil/atoms/communitiesAtom'
 import { doc, getDoc } from 'firebase/firestore'
-import { GetServerSidePropsContext, NextPage } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRecoilState } from 'recoil'
-import safeJsonStringify from 'safe-json-stringify'
-interface CommunityPageProps {
+
+type Props = {
   communityData: Community
 }
 
-const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
+const CommunityPage = ({ communityData }: Props) => {
+  // console.log('Here is the data: ', communityData)
+
   const [user, loadingUser] = useAuthState(auth)
-  const [communityStateValue, setCommunityStateValue] = useRecoilState(
-    communitiesState
-  )
+  const [communityStateValue, setCommunityStateValue] =
+    useRecoilState(communityState)
 
   useEffect(() => {
-    setCommunityStateValue(p => ({
+    setCommunityStateValue((p) => ({
       ...p,
       currentCommunity: communityData,
     }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityData])
 
-  if (!communityData) {
-    return <CommunityNotFound />
-  }
-
   return (
-    <div>
-      <h5>
-        currentCommunity:{'  '}
-        {JSON.stringify(communityStateValue.currentCommunity.id)}
-      </h5>
-    </div>
+    <>
+      {communityData ? (
+        <>
+          <PageContent communityData={communityData}>
+            <>
+              <div>LHS</div>
+              <div>LHS</div>
+              <div>LHS</div>
+              <div>LHS</div>
+            </>
+            <>
+              <div>RHS</div>
+            </>
+          </PageContent>
+        </>
+      ) : (
+        <CommunityNotFound />
+      )}
+    </>
   )
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log('getServerSideProps called')
-  //get community data and pass it to client
   try {
     const communityDocRef = doc(
       firestore,
@@ -48,17 +58,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       context.query.communityId as string
     )
     const communityDoc = await getDoc(communityDocRef)
-
     return {
       props: {
-        communityData: JSON.parse(
-          safeJsonStringify({ id: communityDoc.id, ...communityDoc.data() })
-        ),
+        communityData: communityDoc.exists()
+          ? JSON.parse(
+              JSON.stringify({ id: communityDoc.id, ...communityDoc.data() })
+            )
+          : '',
       },
     }
   } catch (err) {
     if (err instanceof Error) {
-      console.log('SSR Error:', err)
+      console.log('SSR Error:', err.message)
     } else {
       console.log('unidentified error: ', err)
     }

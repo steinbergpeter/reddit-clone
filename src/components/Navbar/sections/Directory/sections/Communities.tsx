@@ -1,7 +1,7 @@
 import CreateCommunityModal from '@/components/Modals/CreateCommunityModal'
 import { Flex, Icon, MenuItem } from '@chakra-ui/react'
 import { GrAdd } from 'react-icons/gr'
-import { modalState } from '@/atoms/modalAtom'
+import { modalState } from '@/state/recoil/atoms/modalAtom'
 import { useRecoilState } from 'recoil'
 
 const Communities = () => {
@@ -9,9 +9,9 @@ const Communities = () => {
   const { isCreateCommunityModalOpen } = allModalsState
 
   const handleOpen = () =>
-    setAllModalsState(p => ({ ...p, isCreateCommunityModalOpen: true }))
+    setAllModalsState((p) => ({ ...p, isCreateCommunityModalOpen: true }))
   const handleClose = () =>
-    setAllModalsState(p => ({ ...p, isCreateCommunityModalOpen: false }))
+    setAllModalsState((p) => ({ ...p, isCreateCommunityModalOpen: false }))
 
   return (
     <>

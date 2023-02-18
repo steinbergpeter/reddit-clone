@@ -9,12 +9,8 @@ type Props = {
 }
 
 const CommunityName = (props: Props) => {
-  const {
-    communityName,
-    setCommunityName,
-    charsRemaining,
-    setCharsRemaining,
-  } = props
+  const { communityName, setCommunityName, charsRemaining, setCharsRemaining } =
+    props
 
   function handleNameChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value

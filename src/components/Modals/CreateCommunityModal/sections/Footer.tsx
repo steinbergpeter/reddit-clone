@@ -29,7 +29,7 @@ const Footer = (props: Props) => {
         )
       }
       //look up reference for list of communities
-      await runTransaction(firestore, async transaction => {
+      await runTransaction(firestore, async (transaction) => {
         const communityDocRef = doc(firestore, 'communities', communityName)
         const communityDoc = await transaction.get(communityDocRef)
         //verify same name community doesn't already exist

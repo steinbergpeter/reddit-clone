@@ -1,6 +1,6 @@
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
 import { useState, ChangeEvent, FormEvent } from 'react'
-import { modalState } from '@/atoms/modalAtom'
+import { modalState } from '@/state/recoil/atoms/modalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
@@ -16,15 +16,11 @@ const Login = () => {
   const [loginForm, setLoginForm] = useState(loginFormDefault)
   const { email, password } = loginForm
 
-  const [
-    signInWithEmailAndPassword,
-    user,
-    loading,
-    error,
-  ] = useSignInWithEmailAndPassword(auth)
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setLoginForm(p => ({ ...p, [e.target.name]: e.target.value }))
+    setLoginForm((p) => ({ ...p, [e.target.name]: e.target.value }))
   }
 
   const isLoginActive = email === '' || password === ''
@@ -37,11 +33,11 @@ const Login = () => {
   }
 
   const switchToSignup = () => {
-    setModalState(p => ({ ...p, setModalState: 'signup' }))
+    setModalState((p) => ({ ...p, setModalState: 'signup' }))
   }
 
   const switchToReset = () => {
-    setModalState(p => ({ ...p, setModalState: 'resetPassword' }))
+    setModalState((p) => ({ ...p, setModalState: 'resetPassword' }))
   }
 
   return (

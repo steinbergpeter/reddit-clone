@@ -17,11 +17,21 @@ const OAuthButtons = () => {
         isLoading={loading}
         onClick={handleGoogleClick}
       >
-        <Image src="/images/googlelogo.png" height="21px" mr={2} />
+        <Image
+          alt="google logo"
+          src="/images/googlelogo.png"
+          height="21px"
+          mr={2}
+        />
         Continue with Google
       </Button>
       <Button mb={2} variant="oauth">
-        <Image src="/images/github-mark.png" height="21px" mr={2} />
+        <Image
+          alt="GitHub logo"
+          src="/images/github-mark.png"
+          height="21px"
+          mr={2}
+        />
         Continue with GitHub
       </Button>
       {error && <Text>{error.message}</Text>}

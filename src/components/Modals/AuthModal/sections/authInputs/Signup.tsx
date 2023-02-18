@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { Input, Button, Flex, Text } from '@chakra-ui/react'
-import { modalState } from '@/atoms/modalAtom'
+import { modalState } from '@/state/recoil/atoms/modalAtom'
 import { useSetRecoilState } from 'recoil'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/clientApp'
@@ -19,12 +19,8 @@ const Signup = () => {
   const [error, setError] = useState('')
   const isSubmitActive =
     email === '' || password === '' || confirmPassword === ''
-  const [
-    createUserWithEmailAndPassword,
-    user,
-    loading,
-    userError,
-  ] = useCreateUserWithEmailAndPassword(auth)
+  const [createUserWithEmailAndPassword, user, loading, userError] =
+    useCreateUserWithEmailAndPassword(auth)
   //Firebase logic
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -37,10 +33,10 @@ const Signup = () => {
     setSignupForm(signupFormDefault)
   }
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSignupForm(p => ({ ...p, [e.target.name]: e.target.value }))
+    setSignupForm((p) => ({ ...p, [e.target.name]: e.target.value }))
   }
   const switchToLogin = () => {
-    setModalState(p => ({ ...p, authModalView: 'login' }))
+    setModalState((p) => ({ ...p, authModalView: 'login' }))
   }
 
   return (

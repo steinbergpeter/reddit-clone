@@ -9,7 +9,7 @@ type LayoutProps = {
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <Flex justify="center" bg="white">
+      <Flex justify="center" bg="gray.100">
         <Navbar />
       </Flex>
       <main>{children}</main>

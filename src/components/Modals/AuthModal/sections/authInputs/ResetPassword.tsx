@@ -2,7 +2,7 @@ import React, { useState, FormEvent } from 'react'
 import { Button, Flex, Icon, Input, Text } from '@chakra-ui/react'
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth'
 import { BsDot, BsReddit } from 'react-icons/bs'
-import { modalState, AuthModalView } from '@/atoms/modalAtom'
+import { modalState, AuthModalView } from '@/state/recoil/atoms/modalAtom'
 import { auth } from '@/firebase/clientApp'
 import { useSetRecoilState } from 'recoil'
 
@@ -11,9 +11,8 @@ const ResetPassword = () => {
 
   const [email, setEmail] = useState('')
   const [success, setSuccess] = useState(false)
-  const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
-    auth
-  )
+  const [sendPasswordResetEmail, sending, error] =
+    useSendPasswordResetEmail(auth)
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -22,9 +21,9 @@ const ResetPassword = () => {
   }
 
   const handleGotoLogin = () =>
-    setModalState(p => ({ ...p, authModalView: 'login' }))
+    setModalState((p) => ({ ...p, authModalView: 'login' }))
   const handleGotoSignup = () =>
-    setModalState(p => ({ ...p, authModalView: 'signup' }))
+    setModalState((p) => ({ ...p, authModalView: 'signup' }))
 
   return (
     <Flex direction="column" alignItems="center" width="100%">
@@ -47,7 +46,7 @@ const ResetPassword = () => {
               placeholder="email"
               type="email"
               mb={2}
-              onChange={event => setEmail(event.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
               fontSize="10pt"
               _placeholder={{ color: 'gray.500' }}
               _hover={{

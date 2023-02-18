@@ -1,4 +1,4 @@
-import { modalState } from '@/atoms/modalAtom'
+import { modalState } from '@/state/recoil/atoms/modalAtom'
 import { auth } from '@/firebase/clientApp'
 import {
   Flex,
@@ -20,10 +20,11 @@ const AuthModal = () => {
   const [user, _loading, _error] = useAuthState(auth)
   const { isAuthModalOpen: isOpen, authModalView: view } = authModalState
   const handleClose = () =>
-    setAuthModalState(p => ({ ...p, isAuthModalOpen: false }))
+    setAuthModalState((p) => ({ ...p, isAuthModalOpen: false }))
 
   useEffect(() => {
     if (user) handleClose()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   return (

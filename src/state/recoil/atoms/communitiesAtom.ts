@@ -10,8 +10,15 @@ export interface Community {
   imageURL?: string
 }
 
+export const defaultCommunity: Community = {
+  id: '',
+  creatorId: '',
+  numberOfMembers: 0,
+  privacyType: 'public',
+}
+
 export interface CommunitySnippet {
-  communitiesID: string
+  communityId: string
   isModerator: boolean
   imageURL?: string
 }
@@ -23,7 +30,7 @@ interface CommunityState {
     | Community
     | boolean
     | undefined
-  mySnippets: CommunitySnippet[]
+  currentUsersSnippets: CommunitySnippet[]
   initSnippetsFetched: boolean
   visitedCommunities: {
     [key: string]: Community
@@ -31,21 +38,14 @@ interface CommunityState {
   currentCommunity: Community
 }
 
-export const defaultCommunity: Community = {
-  id: '',
-  creatorId: '',
-  numberOfMembers: 0,
-  privacyType: 'public',
-}
-
 export const defaultCommunityState: CommunityState = {
-  mySnippets: [],
+  currentUsersSnippets: [],
   initSnippetsFetched: false,
   visitedCommunities: {},
   currentCommunity: defaultCommunity,
 }
 
-export const communitiesState = atom<CommunityState>({
-  key: 'communitiesState',
+export const communityState = atom<CommunityState>({
+  key: 'communityState',
   default: defaultCommunityState,
 })
